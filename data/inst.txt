@@ -1,0 +1,2 @@
+Please download the dataset into this directory from here: 
+https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
