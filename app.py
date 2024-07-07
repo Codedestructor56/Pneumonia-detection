@@ -1,7 +1,6 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-import os
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.model_selection import train_test_split
@@ -11,11 +10,16 @@ from sklearn.linear_model import LogisticRegression
 from models import CustomSVM, CustomLogisticRegression, knn_predict
 from eda import display_eda, load_image_paths
 
-knn = KNeighborsClassifier(n_neighbors=3)
-svm = SVC()
-log_reg = LogisticRegression()
-custom_svm = CustomSVM()
-custom_log_reg = CustomLogisticRegression()
+@st.cache_resource
+def load_models():
+    knn = KNeighborsClassifier(n_neighbors=3)
+    svm = SVC()
+    log_reg = LogisticRegression()
+    custom_svm = CustomSVM()
+    custom_log_reg = CustomLogisticRegression()
+    return knn, svm, log_reg, custom_svm, custom_log_reg
+
+knn, svm, log_reg, custom_svm, custom_log_reg = load_models()
 
 def main():
     st.title("Pneumonia Detection App")
@@ -34,7 +38,6 @@ def preprocess_images(image_paths):
         image_resized = image.resize((64, 64))
         images.append(np.array(image_resized).flatten())
     return np.array(images)
-
 
 def load_and_preprocess_data():
     normal_images, pneumonia_images = load_image_paths()
